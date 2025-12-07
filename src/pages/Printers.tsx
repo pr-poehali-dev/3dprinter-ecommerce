@@ -2,9 +2,36 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { useState } from 'react';
+
+interface Printer {
+  name: string;
+  price: string;
+  image: string;
+  specs: {
+    volume: string;
+    speed: string;
+    layer: string;
+    materials: string;
+  };
+  badge: string;
+  badgeVariant: 'default' | 'secondary' | 'destructive' | 'outline';
+  description: string;
+  features: string[];
+}
 
 const Printers = () => {
-  const printers = [
+  const [selectedPrinter, setSelectedPrinter] = useState<Printer | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const printers: Printer[] = [
     {
       name: 'Prusa MK4',
       price: '89 990',
@@ -17,6 +44,15 @@ const Printers = () => {
       },
       badge: 'Хит продаж',
       badgeVariant: 'default' as const,
+      description: 'Надежный и проверенный 3D принтер от чешского производителя. Идеально подходит как для профессионалов, так и для любителей. Автоматическая калибровка стола и датчик окончания филамента.',
+      features: [
+        'Автоматическая калибровка стола',
+        'Датчик окончания филамента',
+        'Съёмная магнитная платформа',
+        'Тихая работа',
+        'Открытый исходный код',
+        'Большое сообщество',
+      ],
     },
     {
       name: 'Bambu Lab X1-Carbon',
@@ -30,6 +66,15 @@ const Printers = () => {
       },
       badge: 'Премиум',
       badgeVariant: 'secondary' as const,
+      description: 'Революционный принтер с рекордной скоростью печати. Закрытая камера с контролем температуры, автоматическая калибровка и система мультиматериальной печати делают его идеальным для профессионального использования.',
+      features: [
+        'Скорость печати до 500 мм/с',
+        'Автоматическая калибровка лидаром',
+        'Закрытая камера с подогревом',
+        'Мультиматериальная печать (4 цвета)',
+        'AI камера для контроля печати',
+        'Wi-Fi и облачная интеграция',
+      ],
     },
     {
       name: 'Creality K1 Max',
@@ -43,6 +88,15 @@ const Printers = () => {
       },
       badge: 'Новинка',
       badgeVariant: 'destructive' as const,
+      description: 'Самый быстрый принтер в линейке Creality с огромной областью печати. Идеально подходит для печати крупных моделей и прототипов. Интуитивный сенсорный экран и простая настройка.',
+      features: [
+        'Скорость печати до 600 мм/с',
+        'Огромная область печати 300×300×300 мм',
+        'Автоматическое выравнивание',
+        '4.3" сенсорный экран',
+        'Прямой привод экструдера',
+        'Встроенная камера',
+      ],
     },
     {
       name: 'Anycubic Kobra 2 Pro',
@@ -56,6 +110,15 @@ const Printers = () => {
       },
       badge: 'Выгодно',
       badgeVariant: 'outline' as const,
+      description: 'Отличное соотношение цены и качества. Высокая скорость печати, надежная конструкция и автоматическое выравнивание стола делают этот принтер идеальным выбором для среднего уровня.',
+      features: [
+        'Высокая скорость 300 мм/с',
+        'Автоматическое выравнивание 25 точек',
+        'Прямой привод экструдера',
+        'Гибкая магнитная платформа PEI',
+        'Датчик окончания филамента',
+        'Возобновление печати после сбоя',
+      ],
     },
     {
       name: 'Ultimaker S5',
@@ -69,6 +132,15 @@ const Printers = () => {
       },
       badge: 'Профессионал',
       badgeVariant: 'secondary' as const,
+      description: 'Профессиональный принтер промышленного уровня. Двойной экструдер для многоцветной печати и растворимых поддержек. Надежность и точность для серьезных проектов.',
+      features: [
+        'Двойной экструдер',
+        'Промышленная точность',
+        'Закрытая камера',
+        'Большая область печати',
+        'Сенсорный экран 4.7"',
+        'Поддержка инженерных материалов',
+      ],
     },
     {
       name: 'Ender-3 V3 SE',
@@ -82,6 +154,15 @@ const Printers = () => {
       },
       badge: 'Для начинающих',
       badgeVariant: 'outline' as const,
+      description: 'Идеальный выбор для начинающих. Простая сборка, интуитивное управление и доступная цена. Несмотря на бюджетную стоимость, обеспечивает высокое качество печати.',
+      features: [
+        'Готов к работе из коробки',
+        'Автоматическое выравнивание',
+        'Быстрая сборка за 20 минут',
+        'Удобный интерфейс',
+        'Прямой привод экструдера',
+        'Отличная цена для новичков',
+      ],
     },
   ];
 
@@ -149,7 +230,14 @@ const Printers = () => {
                   <Icon name="ShoppingCart" size={18} className="mr-2" />
                   Купить
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => {
+                    setSelectedPrinter(printer);
+                    setIsOpen(true);
+                  }}
+                >
                   <Icon name="Info" size={18} />
                 </Button>
               </CardFooter>
@@ -183,6 +271,103 @@ const Printers = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {selectedPrinter && (
+            <>
+              <DialogHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <DialogTitle className="text-3xl font-heading mb-2">
+                      {selectedPrinter.name}
+                    </DialogTitle>
+                    <Badge variant={selectedPrinter.badgeVariant}>
+                      {selectedPrinter.badge}
+                    </Badge>
+                  </div>
+                  <div className="text-6xl">{selectedPrinter.image}</div>
+                </div>
+                <DialogDescription className="text-base text-foreground">
+                  {selectedPrinter.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-xl font-heading font-semibold mb-4">Технические характеристики</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Box" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Объем печати</p>
+                        <p className="font-semibold">{selectedPrinter.specs.volume}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Zap" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Скорость</p>
+                        <p className="font-semibold">{selectedPrinter.specs.speed}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Layers" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Толщина слоя</p>
+                        <p className="font-semibold">{selectedPrinter.specs.layer}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Package" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Материалы</p>
+                        <p className="font-semibold text-sm">{selectedPrinter.specs.materials}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-heading font-semibold mb-4">Ключевые особенности</h3>
+                  <ul className="grid grid-cols-2 gap-3">
+                    {selectedPrinter.features.map((feature, index) => (
+                      <li key={index} className="flex items-start space-x-2">
+                        <Icon name="CheckCircle" size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex items-center justify-between p-6 bg-card rounded-lg">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Цена</p>
+                    <div className="flex items-baseline">
+                      <span className="text-4xl font-heading font-bold text-primary">
+                        {selectedPrinter.price}
+                      </span>
+                      <span className="text-2xl text-muted-foreground ml-1">₽</span>
+                    </div>
+                  </div>
+                  <Button size="lg" className="shadow-lg shadow-primary/30">
+                    <Icon name="ShoppingCart" size={20} className="mr-2" />
+                    Купить
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

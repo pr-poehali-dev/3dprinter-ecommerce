@@ -2,9 +2,38 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { useState } from 'react';
+
+interface Filament {
+  name: string;
+  price: string;
+  image: string;
+  type: string;
+  specs: {
+    diameter: string;
+    weight: string;
+    temperature: string;
+    colors: string;
+  };
+  badge: string;
+  badgeVariant: 'default' | 'secondary' | 'destructive' | 'outline';
+  description: string;
+  features: string[];
+  applications: string[];
+}
 
 const Filament = () => {
-  const filaments = [
+  const [selectedFilament, setSelectedFilament] = useState<Filament | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filaments: Filament[] = [
     {
       name: 'PLA Premium',
       price: '1 290',
@@ -18,6 +47,16 @@ const Filament = () => {
       },
       badge: 'Популярный',
       badgeVariant: 'default' as const,
+      description: 'Самый популярный материал для 3D печати. Экологичный, легкий в использовании, не требует подогреваемого стола. Идеально подходит для начинающих и декоративных изделий.',
+      features: [
+        'Низкая температура печати',
+        'Не требует подогрева стола',
+        'Биоразлагаемый',
+        'Минимальная усадка',
+        'Яркие цвета',
+        'Легко шлифуется',
+      ],
+      applications: ['Прототипирование', 'Декоративные изделия', 'Игрушки', 'Сувениры'],
     },
     {
       name: 'PETG Strong',
@@ -32,6 +71,16 @@ const Filament = () => {
       },
       badge: 'Прочный',
       badgeVariant: 'secondary' as const,
+      description: 'Прочный и устойчивый материал. Сочетает простоту PLA с прочностью ABS. Устойчив к влаге, ультрафиолету и химическим воздействиям. Идеален для функциональных деталей.',
+      features: [
+        'Высокая прочность',
+        'Устойчивость к влаге',
+        'Устойчивость к UV',
+        'Химическая стойкость',
+        'Легко печатается',
+        'Прозрачные варианты',
+      ],
+      applications: ['Механические детали', 'Функциональные изделия', 'Корпуса', 'Уличное применение'],
     },
     {
       name: 'ABS Professional',
@@ -46,6 +95,16 @@ const Filament = () => {
       },
       badge: 'Термостойкий',
       badgeVariant: 'destructive' as const,
+      description: 'Профессиональный термостойкий пластик. Высокая прочность и ударостойкость. Требует закрытую камеру и подогреваемый стол. Идеален для функциональных деталей.',
+      features: [
+        'Высокая термостойкость',
+        'Отличная ударопрочность',
+        'Хорошая межслойная адгезия',
+        'Легко обрабатывается',
+        'Химическая стойкость',
+        'Можно клеить ацетоном',
+      ],
+      applications: ['Автодетали', 'Корпуса электроники', 'Механизмы', 'Промышленность'],
     },
     {
       name: 'TPU Flexible',
@@ -60,6 +119,16 @@ const Filament = () => {
       },
       badge: 'Гибкий',
       badgeVariant: 'secondary' as const,
+      description: 'Гибкий и эластичный материал. Похож на резину, отлично растягивается и сжимается. Идеально подходит для чехлов, прокладок и гибких деталей. Требует низкой скорости печати.',
+      features: [
+        'Высокая эластичность',
+        'Устойчивость к износу',
+        'Маслостойкость',
+        'Хорошая адгезия',
+        'Стойкость к разрыву',
+        'Мягкость на ощупь',
+      ],
+      applications: ['Чехлы', 'Прокладки', 'Гибкие шланги', 'Уплотнители'],
     },
     {
       name: 'Nylon Ultra',
@@ -74,6 +143,16 @@ const Filament = () => {
       },
       badge: 'Инженерный',
       badgeVariant: 'secondary' as const,
+      description: 'Профессиональный инженерный материал. Исключительная прочность и устойчивость к износу. Требует закрытой камеры и сушки перед печатью. Идеален для функциональных деталей.',
+      features: [
+        'Высокая прочность',
+        'Износостойкость',
+        'Термостойкость',
+        'Гибкость',
+        'Химическая стойкость',
+        'Механическая прочность',
+      ],
+      applications: ['Шестерни', 'Подшипники', 'Механические детали', 'Промышленность'],
     },
     {
       name: 'Wood Fill',
@@ -88,6 +167,16 @@ const Filament = () => {
       },
       badge: 'Эко',
       badgeVariant: 'outline' as const,
+      description: 'Композитный материал с древесными волокнами. Создает эффект натурального дерева, можно шлифовать и лакировать. Экологичный и безопасный. Идеален для декоративных изделий.',
+      features: [
+        'Эффект натурального дерева',
+        'Можно шлифовать',
+        'Приятный запах',
+        'Легко печатается',
+        'Биоразлагаемый',
+        'Можно красить',
+      ],
+      applications: ['Декор', 'Сувениры', 'Мебельные элементы', 'Художественные изделия'],
     },
     {
       name: 'Metal Fill',
@@ -102,6 +191,16 @@ const Filament = () => {
       },
       badge: 'Премиум',
       badgeVariant: 'secondary' as const,
+      description: 'Композитный материал с металлическими частицами. Создает эффект настоящего металла. Тяжелее обычного пластика, можно полировать. Идеален для эксклюзивных изделий.',
+      features: [
+        'Эффект настоящего металла',
+        'Можно полировать',
+        'Большая плотность',
+        'Ощущение металла',
+        'Варианты: медь, бронза, сталь',
+        'Легко обрабатывается',
+      ],
+      applications: ['Сувениры', 'Украшения', 'Декоративные элементы', 'Коллекционные изделия'],
     },
     {
       name: 'Silk PLA',
@@ -116,6 +215,16 @@ const Filament = () => {
       },
       badge: 'Блестящий',
       badgeVariant: 'outline' as const,
+      description: 'ПЛА с шелковистым блеском. Создает переливающийся эффект, напоминающий шелк. Яркие насыщенные цвета. Легко печатается, как обычный PLA. Идеален для декоративных изделий.',
+      features: [
+        'Шелковистый блеск',
+        'Переливающийся эффект',
+        'Яркие цвета',
+        'Легко печатается',
+        'Гладкая поверхность',
+        'Биоразлагаемый',
+      ],
+      applications: ['Вазы', 'Декоративные изделия', 'Сувениры', 'Украшения'],
     },
     {
       name: 'Glow in Dark',
@@ -130,6 +239,16 @@ const Filament = () => {
       },
       badge: 'Светящийся',
       badgeVariant: 'default' as const,
+      description: 'ПЛА с фосфоресцирующими частицами. Светится в темноте после подзарядки от света. Оригинальный эффект для уникальных изделий. Легко печатается как обычный PLA.',
+      features: [
+        'Светится в темноте',
+        'Фосфоресцирующий эффект',
+        'Легко печатается',
+        'Яркое свечение',
+        'Долгое послесвечение',
+        'Безопасно для детей',
+      ],
+      applications: ['Игрушки', 'Декор', 'Ночники', 'Оригинальные сувениры'],
     },
   ];
 
@@ -225,7 +344,14 @@ const Filament = () => {
                   <Icon name="ShoppingCart" size={18} className="mr-2" />
                   Купить
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => {
+                    setSelectedFilament(filament);
+                    setIsOpen(true);
+                  }}
+                >
                   <Icon name="Info" size={18} />
                 </Button>
               </CardFooter>
@@ -266,6 +392,117 @@ const Filament = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {selectedFilament && (
+            <>
+              <DialogHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <DialogTitle className="text-3xl font-heading mb-2">
+                      {selectedFilament.name}
+                    </DialogTitle>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={selectedFilament.badgeVariant}>
+                        {selectedFilament.badge}
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">{selectedFilament.type}</span>
+                    </div>
+                  </div>
+                  <div className="text-6xl">{selectedFilament.image}</div>
+                </div>
+                <DialogDescription className="text-base text-foreground">
+                  {selectedFilament.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-xl font-heading font-semibold mb-4">Технические характеристики</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Diameter" size={20} className="text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Диаметр</p>
+                        <p className="font-semibold">{selectedFilament.specs.diameter}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Weight" size={20} className="text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Вес</p>
+                        <p className="font-semibold">{selectedFilament.specs.weight}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Thermometer" size={20} className="text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Температура</p>
+                        <p className="font-semibold text-sm">{selectedFilament.specs.temperature}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-card rounded-lg">
+                      <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <Icon name="Palette" size={20} className="text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Цвета</p>
+                        <p className="font-semibold text-sm">{selectedFilament.specs.colors}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-heading font-semibold mb-4">Ключевые особенности</h3>
+                  <ul className="grid grid-cols-2 gap-3">
+                    {selectedFilament.features.map((feature, index) => (
+                      <li key={index} className="flex items-start space-x-2">
+                        <Icon name="CheckCircle" size={18} className="text-secondary mt-0.5 flex-shrink-0" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-heading font-semibold mb-4">Применение</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedFilament.applications.map((app, index) => (
+                      <Badge key={index} variant="outline" className="text-sm">
+                        {app}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-6 bg-card rounded-lg">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Цена</p>
+                    <div className="flex items-baseline">
+                      <span className="text-4xl font-heading font-bold text-secondary">
+                        {selectedFilament.price}
+                      </span>
+                      <span className="text-2xl text-muted-foreground ml-1">₽</span>
+                    </div>
+                  </div>
+                  <Button size="lg" className="shadow-lg shadow-secondary/30">
+                    <Icon name="ShoppingCart" size={20} className="mr-2" />
+                    Купить
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
