@@ -52,7 +52,7 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center max-w-4xl mx-auto animate-fade-in">
             <div className="inline-flex items-center justify-center mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center animate-float shadow-2xl shadow-primary/50 overflow-hidden p-3">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center animate-float shadow-2xl shadow-primary/50 overflow-hidden p-2">
                 <img src="https://cdn.poehali.dev/files/логоSl.png" alt="SToreL Logo" className="w-full h-full object-contain" />
               </div>
             </div>
